@@ -1,5 +1,6 @@
 package com.example.cloudnative.catalogws.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -23,11 +24,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RedisConfig {
 
+	@Value("${spring.redis.lettuce.host}")
+	private String host;
+
+	@Value("${spring.redis.lettuce.port}")
+	private int port;
+
 	private final CatalogRepository catalogRepository;
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory("localhost",6379);
+		LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(host, port);
 		lettuceConnectionFactory.setShareNativeConnection(false);
 		return lettuceConnectionFactory;
 	}
